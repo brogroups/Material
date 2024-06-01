@@ -1,0 +1,46 @@
+:root{
+    /* main style */
+    --font-family:"Open Sans" sans-serif;
+    --box-margin:24px;
+    --font-size:16px;
+    /* buttons */
+    --main-button-bg:rgba(56, 152, 236, 1);
+    --main-button-bg-hover:rgba(100, 175, 240, 1);
+    --main-button-bg-focus:rgba(17, 103, 178, 1);
+    --main-button-bg-disabled:rgba(136, 147, 156, 1);
+
+    --deleted-button-bg:rgba(236, 56, 107, 1);
+    --deleted-button-bg-hover:rgba(240, 100, 140, 1);
+    --deleted-button-bg-focus:rgba(178, 17, 63, 1);
+    --deleted-button-bg-disabled:rgba(136, 147, 156, 1);
+    /* colors */
+    --main-text-color:rgba(31, 31, 31, 1);
+    --some-text-color:rgba(145, 158, 173, 1);
+    /* background color */
+
+    --sidebar-bg: rgba(0, 14, 51, 1);
+    --content-bg:rgba(254, 255, 255, 1);
+
+}
+*{
+    font-family: cursive;
+}
+
+a,li{
+    text-decoration: none;
+    list-style: none;
+    color: var(--main-text-color);
+}
+button, input{
+    border: none;
+    outline: none;
+    background: none;
+    padding: 12px, 24px, 12px, 24px;
+    color: #000;
+    cursor: pointer;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+}
