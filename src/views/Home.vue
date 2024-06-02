@@ -1,12 +1,10 @@
 <script setup>
-import Calendar from '../components/calendar.vue'
-import Multiselect from '@/components/multiselect.vue';
+  import CreateFile from '../components/test.vue'
 </script>
 
 <template>
   <div class="header">
-    <Calendar write-day="2021-0"/>
-    <Multiselect  />
+   <CreateFile  limit="100" fileType=".json"/>
   </div>
 </template>
 
