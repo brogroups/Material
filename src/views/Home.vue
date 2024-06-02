@@ -5,8 +5,8 @@ import Multiselect from '@/components/multiselect.vue';
 
 <template>
   <div class="header">
-    <Calendar value="2021-09-25"/>
-    <Multiselect multiselect="false"/>
+    <Calendar write-day="2021-0"/>
+    <Multiselect  />
   </div>
 </template>
 

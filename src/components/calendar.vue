@@ -22,7 +22,7 @@
               v-for="day in days"
               :key="day.date"
               :class="day.classes"
-              @click="selectDate(day.date)"
+              @click="selectDate(day)"
             >
               {{ day.text }}
             </div>
@@ -59,9 +59,14 @@
 
 <script>
 export default {
+  props: {
+    writeDay: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
-      props:{},
       isDatePickerVisible: false,
       selectedDate: new Date(),
       currentYear: new Date().getFullYear(),
@@ -76,7 +81,10 @@ export default {
   },
   computed: {
     selectedDateText() {
-      return this.selectedDate.toDateString();
+      return this.formattedSelectedDate;
+    },
+    formattedSelectedDate() {
+      return this.selectedDate.toISOString().substring(0, 10);
     },
     currentMonthName() {
       return this.months[this.currentMonth];
@@ -88,22 +96,14 @@ export default {
       let startDay = firstDay === 0 ? 6 : firstDay - 1; // Adjusting for Monday start
 
       // Previous month's last days or current month's first days
-      if (startDay === 0) {
-        const prevMonthDays = new Date(this.currentYear, this.currentMonth, 0).getDate();
-        for (let i = 7; i > 0; i--) {
-          days.push({ 
-            text: prevMonthDays - i + 1, 
-            classes: 'unique-day unique-not-current', 
-            date: new Date(this.currentYear, this.currentMonth - 1, prevMonthDays - i + 1) 
-          });
-        }
-      } else {
+      if (startDay > 0) {
         const prevMonthDays = new Date(this.currentYear, this.currentMonth, 0).getDate();
         for (let i = startDay; i > 0; i--) {
           days.push({ 
             text: prevMonthDays - i + 1, 
             classes: 'unique-day unique-not-current', 
-            date: new Date(this.currentYear, this.currentMonth - 1, prevMonthDays - i + 1) 
+            date: new Date(this.currentYear, this.currentMonth - 1, prevMonthDays - i + 1),
+            isCurrentMonth: false 
           });
         }
       }
@@ -128,17 +128,19 @@ export default {
         days.push({ 
           text: i, 
           classes: dayClass, 
-          date: new Date(this.currentYear, this.currentMonth, i) 
+          date: new Date(this.currentYear, this.currentMonth, i),
+          isCurrentMonth: true 
         });
       }
 
-      // Fill remaining days from next month
-      while (days.length < 42) {
-        const day = days.length - daysInMonth - startDay + 1;
+      // Next month's first days
+      const nextMonthDays = 42 - days.length;
+      for (let i = 1; i <= nextMonthDays; i++) {
         days.push({ 
-          text: day, 
+          text: i, 
           classes: 'unique-day unique-not-current', 
-          date: new Date(this.currentYear, this.currentMonth + 1, day) 
+          date: new Date(this.currentYear, this.currentMonth + 1, i),
+          isCurrentMonth: false 
         });
       }
 
@@ -150,6 +152,21 @@ export default {
         years.push(i);
       }
       return years;
+    }
+  },
+  watch: {
+    writeDay: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          const date = new Date(newValue);
+          if (!isNaN(date)) {
+            this.selectedDate = date;
+            this.currentYear = date.getFullYear();
+            this.currentMonth = date.getMonth();
+          }
+        }
+      }
     }
   },
   methods: {
@@ -194,8 +211,12 @@ export default {
       this.currentMonth = month;
       this.currentMode = 'date';
     },
-    selectDate(date) {
-      this.selectedDate = date;
+    selectDate(day) {
+      this.selectedDate = day.date;
+      if (!day.isCurrentMonth) {
+        this.currentMonth = day.date.getMonth();
+        this.currentYear = day.date.getFullYear();
+      }
       this.isDatePickerVisible = false;
     },
     closeDatePicker(event) {
@@ -212,3 +233,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* Add your CSS styles here */
+</style>
